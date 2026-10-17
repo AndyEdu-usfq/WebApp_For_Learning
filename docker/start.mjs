@@ -5,7 +5,7 @@ import {authorized,validOrigin} from './security.mjs';
 const password=process.env.APP_PASSWORD;
 const username=process.env.APP_USERNAME||'learner';
 if(!password||password.length<16)throw new Error('APP_PASSWORD must contain at least 16 characters.');
-const config={name:'fluency-lab-container',main:'./dist/server/index.js',no_bundle:true,compatibility_date:'2026-05-15',compatibility_flags:['nodejs_compat'],assets:{directory:'./dist/client'},d1_databases:[{binding:'DB',database_name:'fluency-lab',database_id:'00000000-0000-4000-8000-000000000000',migrations_dir:'./drizzle'}]};
+const config={name:'fluency-lab-container',main:'./dist/server/index.js',no_bundle:true,find_additional_modules:true,rules:[{type:'ESModule',globs:['**/*.js','**/*.mjs']}],compatibility_date:'2026-05-15',compatibility_flags:['nodejs_compat'],assets:{directory:'./dist/client'},d1_databases:[{binding:'DB',database_name:'fluency-lab',database_id:'00000000-0000-4000-8000-000000000000',migrations_dir:'./drizzle'}]};
 writeFileSync('container-wrangler.json',JSON.stringify(config));
 const wrangler='./node_modules/wrangler/bin/wrangler.js';
 const migration=spawnSync(process.execPath,[wrangler,'d1','migrations','apply','DB','--local','--config','container-wrangler.json','--persist-to','/data'],{stdio:'inherit',env:{...process.env,CI:'true'}});
